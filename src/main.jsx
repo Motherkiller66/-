@@ -1,9 +1,107 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './style.css'
 
-const T={welcome:'\u4f60\u597d',about:'\u6211\u662f\u4e00\u540d\u5e7f\u544a\u5b6627\u5c4a\u5e94\u5c4a\u751f\uff0c\u5173\u6ce8\u54c1\u724c\u3001\u5185\u5bb9\u4e0e\u4eba\u4e4b\u95f4\u90a3\u4e9b\u5fae\u5999\u5374\u771f\u5b9e\u7684\u8fde\u63a5\u3002',bio:'\u76f8\u4fe1\u6709\u6548\u7684\u521b\u610f\u4e0d\u6b62\u4e8e\u8868\u8fbe\uff0c\u800c\u662f\u5728\u590d\u6742\u4fe1\u606f\u4e2d\u627e\u51fa\u4e00\u53e5\u80fd\u88ab\u8bb0\u4f4f\u7684\u8bdd\u3002\u64c5\u957f\u4ece\u4eba\u7fa4\u6d1e\u5bdf\u51fa\u53d1\uff0c\u5b8c\u6210\u7b56\u7565\u3001\u6982\u5ff5\u5230\u5185\u5bb9\u843d\u5730\u7684\u5b8c\u6574\u601d\u8003\u3002',work:'\u4e00\u4e9b\u5173\u4e8e\u54c1\u724c\u3001\u9752\u5e74\u6587\u5316\u4e0e\u65e5\u5e38\u60c5\u7eea\u7684\u521b\u610f\u7ec3\u4e60\u3002'}
-const projects=[{no:'01',tag:'BRAND CAMPAIGN',name:'\u300c\u672a\u5b8c\u5f85\u7eed\u300d\u54c1\u724c\u7115\u65b0\u8ba1\u5212',color:'blue'},{no:'02',tag:'SOCIAL CONTENT',name:'\u8ba9\u6bcf\u4e00\u6b21\u770b\u89c1\u90fd\u6709\u56de\u54cd',color:'lime'},{no:'03',tag:'INTEGRATED MARKETING',name:'\u57ce\u5e02\u60c5\u7eea\u89c2\u5bdf\u5b9e\u9a8c',color:'peach'}]
-const Arrow=()=> <span className="arrow">&#8599;</span>
-function App(){return <main><section className="hero" id="top"><div className="hero-art"/><nav><a className="brand" href="#top">LIN<span>&reg;</span></a><div className="nav-links"><a href="#about">ABOUT</a><a href="#projects">SELECTED WORK</a><a href="#strengths">CAPABILITIES</a></div><a className="nav-contact" href="#contact">LET'S TALK <Arrow/></a></nav><div className="hero-copy"><p className="eyebrow">ADVERTISING &middot; GRADUATE 2027</p><h1>MAKE<br/><em>IDEAS</em><br/>MATTER.</h1><p className="hero-note">\u7528\u6d1e\u5bdf\u6355\u6349\u60c5\u7eea\uff0c\u7528\u521b\u610f\u5efa\u7acb\u8fde\u63a5\u3002<br/>\u4e00\u540d\u6b63\u5728\u751f\u957f\u7684\u5e7f\u544a\u4eba\u3002</p></div><div className="hero-bottom"><span>SCROLL TO EXPLORE</span><span className="scroll-line"/><span>01 &mdash; 05</span></div></section><section className="about wrap" id="about"><div className="section-index">01 / ABOUT ME</div><div className="about-grid"><div className="portrait"><div className="portrait-inner"><span>{T.welcome}<br/>HELLO</span></div></div><div className="intro"><p className="lead">{T.about}</p><p className="body-copy">{T.bio}</p><div className="contact-row"><a href="mailto:hello@lin.studio">hello@lin.studio <Arrow/></a><a href="#contact">WECHAT / LIN2027 <Arrow/></a></div></div><div className="stats"><div><strong>03<span>+</span></strong><small>\u5b8c\u6574\u9879\u76ee\u7ecf\u9a8c</small></div><div><strong>12<span>+</span></strong><small>\u521b\u610f\u63d0\u6848\u4e0e\u5b9e\u8df5</small></div><div><strong>100<span>%</span></strong><small>\u5bf9\u65b0\u9c9c\u4e8b\u4fdd\u6301\u597d\u5947</small></div></div></div></section><section className="projects" id="projects"><div className="wrap"><div className="section-head"><div className="section-index">02 / SELECTED WORK</div><p>{T.work}</p></div><div className="project-list">{projects.map((p,i)=><article className={'project-card '+p.color} key={p.no}><div className="card-top"><span>{p.no}</span><span>{p.tag}</span></div><div className={'graphic graphic-'+i}><i/><b/></div><div className="card-bottom"><h2>{p.name}</h2><button aria-label="project"><Arrow/></button></div></article>)}</div></div></section><section className="strengths wrap" id="strengths"><div className="section-index">03 / CAPABILITIES</div><h2>\u6211\u628a\u611f\u6027\u7684\u95ee\u9898\uff0c<br/>\u53d8\u6210\u53ef\u4ee5\u88ab\u6267\u884c\u7684\u7b54\u6848\u3002</h2><div className="strength-grid"><article><span>01</span><h3>\u7b56\u7565\u4e0e\u6d1e\u5bdf</h3><p>\u7528\u6237\u7814\u7a76 / \u54c1\u724c\u8bca\u65ad / \u7b56\u7565\u68b3\u7406</p></article><article><span>02</span><h3>\u521b\u610f\u4e0e\u5185\u5bb9</h3><p>\u521b\u610f\u6982\u5ff5 / \u793e\u5a92\u5185\u5bb9 / \u6587\u6848\u8868\u8fbe</p></article><article><span>03</span><h3>\u6574\u5408\u4e0e\u6267\u884c</h3><p>\u4f20\u64ad\u89c4\u5212 / \u9879\u76ee\u7edf\u7b79 / \u590d\u76d8\u8fed\u4ee3</p></article></div></section><section className="contact" id="contact"><div className="contact-orb"/><div className="wrap contact-content"><p className="eyebrow">OPEN FOR INTERNSHIP &amp; COLLABORATION</p><h2>\u8ba9\u6211\u4eec\u4e00\u8d77<br/><em>\u505a\u70b9\u6709\u610f\u601d\u7684\u4e8b\u3002</em></h2><a className="mail" href="mailto:hello@lin.studio">HELLO@LIN.STUDIO <Arrow/></a><footer><span>&copy; 2026 LIN. ALL RIGHTS RESERVED.</span><span>SHANGHAI / CHINA</span><a href="#top">BACK TO TOP &uarr;</a></footer></div></section></main>}
-createRoot(document.getElementById('root')).render(<App/>)
+const Arrow = () => <span aria-hidden="true">↗</span>
+
+const projects = [
+  { no: '01', type: 'AI VIDEO · CITY PROMOTION', title: '兰州城市宣传 AI 视频', desc: '一段以城市气质与地域文化为线索的 AI 影像练习。后续将在这里补充项目背景、创作思路与个人职责。', media: 'VIDEO / 16:9', action: '视频文件待上传' },
+  { no: '02', type: 'AWARD-WINNING AUDIO · 2025', title: '《岛25.2》', award: '第34届时报金犊奖 · 优秀奖', desc: '以“音乐 + AI”重构秦皇岛城市旅游表达。参与核心创意、文案撰写，并使用 Ace Studio、Voisona 辅助音频创作。', media: 'COVER ART', action: '音频文件待上传', audio: true },
+  { no: '03', type: 'POSTER DESIGN · COMPETITION', title: '大广赛宣传海报', desc: '从命题洞察到视觉表达的平面创意项目。后续将在这里补充参赛命题、海报成品与设计推导。', media: 'POSTER / PORTRAIT', action: '海报图片待上传' },
+  { no: '04', type: 'IP DESIGN · DERIVATIVES', title: 'IP 与衍生产品设计', desc: '围绕角色设定、视觉系统与衍生品落地展开的课程项目。后续可展示角色三视图、包装与产品效果图。', media: 'PROJECT GALLERY', action: '项目图片待上传' },
+]
+
+function AudioPlaceholder() {
+  const [playing, setPlaying] = useState(false)
+  return <div className="audio-player" aria-label="获奖作品音频播放器占位">
+    <button onClick={() => setPlaying(!playing)} aria-label={playing ? '暂停音频' : '播放音频'}>{playing ? 'Ⅱ' : '▶'}</button>
+    <div className="audio-track"><span style={{width: playing ? '18%' : '0%'}} /></div>
+    <span>00:00 / --:--</span>
+  </div>
+}
+
+function App() {
+  const heroVideo = useRef(null)
+  return <main>
+    <section className="hero" id="top">
+      <div className="hero-media" aria-label="首页视频预留区域">
+        <div className="ambient one"/><div className="ambient two"/>
+        <div className="media-label"><span>HERO VIDEO</span><small>首页视频待上传 · 建议 16:9 MP4</small></div>
+      </div>
+      <nav>
+        <a className="brand" href="#top">CHEN XINJIE<sup>®</sup></a>
+        <div className="nav-links"><a href="#about">关于我</a><a href="#work">精选作品</a><a href="#contact">联系我</a></div>
+        <a className="nav-cta" href="#contact">LET'S TALK <Arrow/></a>
+      </nav>
+      <div className="hero-copy">
+        <p className="eyebrow">ADVERTISING STUDENT · PORTFOLIO 2026</p>
+        <h1>你好，我是<br/><em>陈鑫杰</em></h1>
+        <p>一名专注品牌创意与视觉表达的广告学学生。</p>
+        <a className="hero-button" href="#work">查看我的作品 <Arrow/></a>
+      </div>
+      <div className="hero-foot"><span>SCROLL TO EXPLORE</span><i/><span>求职作品集</span></div>
+    </section>
+
+    <section className="about wrap" id="about">
+      <div className="section-kicker">01 / ABOUT ME</div>
+      <div className="about-grid">
+        <div className="portrait placeholder"><span>个人照片 / 插画</span><small>PORTRAIT PLACEHOLDER</small></div>
+        <div className="about-copy">
+          <h2>从洞察出发，让创意成为人与品牌之间的连接。</h2>
+          <p>现就读于西北民族大学广告学专业，预计 2027 年毕业。具备市场调研、受众分析、品牌策略、策划提案与传播文案能力，并持续探索 AI 工具在内容生产与营销执行中的可能性。</p>
+          <div className="education"><span>EDUCATION</span><strong>西北民族大学 · 广告学本科</strong><small>2023.09 — 2027.06</small></div>
+        </div>
+        <div className="facts">
+          <div><span>LANGUAGE</span><strong>CET-6 · 443</strong><strong>CET-4 · 516</strong></div>
+          <div><span>FOCUS</span><p>品牌创意<br/>视觉表达<br/>AI 内容创作</p></div>
+          <div><span>STATUS</span><p>寻找广告相关<br/>实习与工作机会</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section className="work" id="work">
+      <div className="wrap">
+        <header className="section-head"><div><div className="section-kicker">02 / SELECTED WORK</div><h2>精选作品</h2></div><p>作品图片、视频与音频将在资料整理完成后逐步替换。<br/>当前版本用于确认结构与内容层级。</p></header>
+        <div className="project-list">
+          {projects.map((project) => <article className="project" key={project.no}>
+            <div className="project-meta"><span>{project.no}</span><span>{project.type}</span></div>
+            <div className={`project-placeholder p${project.no}`}><span>{project.media}</span><small>{project.action}</small></div>
+            <div className="project-info">
+              <div><h3>{project.title}</h3>{project.award && <p className="award">✦ {project.award}</p>}<p>{project.desc}</p></div>
+              <button className="round-button" aria-label={`查看${project.title}`}><Arrow/></button>
+            </div>
+            {project.audio && <AudioPlaceholder/>}
+          </article>)}
+        </div>
+      </div>
+    </section>
+
+    <section className="achievement wrap">
+      <div className="section-kicker">03 / EXPERIENCE</div>
+      <div className="achievement-grid">
+        <h2>不止展示结果，<br/><em>也记录思考。</em></h2>
+        <div className="achievement-list">
+          <article><span>2025</span><div><h3>第34届时报金犊奖 · 优秀奖</h3><p>秦皇岛旅游形象命题｜城市主题曲《岛25.2》</p></div></article>
+          <article><span>校级二等奖</span><div><h3>第12届“挑战杯”大学生课外学术科技作品竞赛</h3><p>市场调研、策略撰写与商业方案策划</p></div></article>
+          <article><span>TOOLS</span><div><h3>AI 辅助内容生产</h3><p>ChatGPT · Gemini · Codex · Ace Studio · Voisona</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section className="contact" id="contact">
+      <div className="contact-glow"/>
+      <div className="wrap contact-inner">
+        <p className="eyebrow">OPEN FOR OPPORTUNITIES</p>
+        <h2>期待与你一起，<br/><em>做点有意思的事。</em></h2>
+        <div className="contact-links">
+          <a href="tel:13735407844">电话 · 137 3540 7844 <Arrow/></a>
+          <a href="mailto:3232285304@qq.com">邮箱 · 3232285304@qq.com <Arrow/></a>
+          <span>微信 · 二维码 / 微信号待补充</span>
+        </div>
+        <footer><span>© 2026 陈鑫杰</span><span>ADVERTISING PORTFOLIO</span><a href="#top">返回顶部 ↑</a></footer>
+      </div>
+    </section>
+  </main>
+}
+
+createRoot(document.getElementById('root')).render(<App />)
