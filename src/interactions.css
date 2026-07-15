@@ -1,0 +1,302 @@
+nav {
+  position: fixed;
+  z-index: 1000;
+  top: 8px;
+  left: 50%;
+  width: calc(100% - 28px);
+  transform: translateX(-50%);
+  padding: 9px 14px;
+  border: 1px solid rgba(255, 255, 255, .26);
+  border-radius: 999px;
+  background: rgba(5, 14, 22, .58);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, .3);
+  backdrop-filter: blur(20px) saturate(1.25);
+  -webkit-backdrop-filter: blur(20px) saturate(1.25);
+  pointer-events: auto;
+}
+
+.hero-media {
+  background-image: url('/hero-hd.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+nav .brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 20px;
+  border-radius: 999px;
+  color: #081017;
+  background: #c6ff3d;
+  box-shadow: 0 0 20px rgba(198, 255, 61, .38);
+  font-size: 13px;
+  letter-spacing: .04em;
+}
+
+nav .brand:hover,
+nav .brand:focus-visible {
+  color: #081017;
+  background: #dcff81;
+  transform: translateY(-1px);
+}
+
+nav .nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  gap: 42px;
+  color: rgba(255, 255, 255, .72);
+  font-size: 11px;
+  z-index: 1;
+}
+
+nav .nav-cta {
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  padding: 8px 15px;
+  border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(8, 12, 15, .72);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+  position: relative;
+  z-index: 2;
+}
+
+nav .mail-icon {
+  font-size: 13px;
+  line-height: 1;
+  color: rgba(255,255,255,.82);
+}
+
+nav .nav-cta:hover,
+nav .nav-cta:focus-visible {
+  color: #fff;
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.48);
+  transform: translateY(-1px);
+}
+
+.hero-media::after {
+  background:
+    linear-gradient(90deg, rgba(9, 22, 35, .82) 0%, rgba(9, 28, 44, .45) 48%, rgba(8, 20, 31, .2) 100%),
+    linear-gradient(0deg, rgba(7, 17, 27, .45), transparent 55%);
+}
+
+/* Editorial, poster-like hero typography inspired by the supplied reference. */
+.hero-copy {
+  top: 8.5vh;
+  left: max(42px, calc((100vw - 1500px) / 2 + 56px));
+  right: max(42px, calc((100vw - 1500px) / 2 + 56px));
+  transform: none;
+  max-width: none;
+}
+
+.hero-copy .eyebrow {
+  display: inline-flex;
+  padding: 7px 11px;
+  margin: 0 0 20px;
+  border: 1px solid rgba(191, 255, 54, .62);
+  color: #bfff36;
+  background: rgba(4, 12, 14, .28);
+  font-weight: 700;
+}
+
+.hero-copy h1 {
+  max-width: none;
+  margin: 0 0 30px;
+  color: #bfff36;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', 'Noto Sans SC', sans-serif;
+  font-size: clamp(108px, 12.6vw, 226px);
+  font-weight: 900;
+  line-height: .86;
+  letter-spacing: .012em;
+  white-space: nowrap;
+  text-transform: uppercase;
+  text-shadow: 0 8px 30px rgba(0, 0, 0, .32);
+}
+
+.hero-copy h1 em {
+  color: inherit;
+  font-style: normal;
+}
+
+.hero-bottom-copy {
+  position: absolute;
+  z-index: 2;
+  left: max(42px, calc((100vw - 1500px) / 2 + 56px));
+  bottom: 86px;
+  max-width: 680px;
+}
+
+.hero-bottom-copy p {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(20px, 1.45vw, 27px);
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: .015em;
+}
+
+.hero-bottom-copy .hero-button {
+  margin-top: 20px;
+  padding: 14px 22px;
+  color: #07110d;
+  background: #e8dfc3;
+  border-color: #e8dfc3;
+  border-radius: 9px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(0,0,0,.2);
+}
+
+.hero-bottom-copy .hero-button:hover,
+.hero-bottom-copy .hero-button:focus-visible {
+  color: #07110d;
+  background: #f4ecd5;
+  border-color: #f4ecd5;
+}
+
+.hero .ambient {
+  display: none;
+}
+
+.nav-links a,
+.nav-cta,
+.hero-button,
+.round-button,
+.audio-player button,
+.contact-links a,
+.contact-links span {
+  transition: color .25s ease, background-color .25s ease,
+    border-color .25s ease, transform .25s ease, box-shadow .25s ease;
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible,
+.nav-cta:hover,
+.nav-cta:focus-visible {
+  color: #bfff36;
+  opacity: 1;
+}
+
+.hero-button:hover,
+.hero-button:focus-visible,
+.contact-links a:hover,
+.contact-links a:focus-visible,
+.contact-links span:hover {
+  color: #2f2924;
+  background: #f1bd83;
+  border-color: #f1bd83;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(43, 31, 22, .18);
+}
+
+.round-button:hover,
+.round-button:focus-visible,
+.audio-player button:hover,
+.audio-player button:focus-visible {
+  color: #2b2925;
+  background: #f1bd83;
+  border-color: #f1bd83;
+  transform: rotate(8deg) scale(1.06);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .2);
+}
+
+.brand:hover,
+.brand:focus-visible {
+  color: #f4bd82;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #f4bd82;
+  outline-offset: 4px;
+}
+
+@media (max-width: 900px) {
+  nav {
+    top: 10px;
+    width: calc(100% - 20px);
+    padding: 14px 18px;
+  }
+
+  nav .brand {
+    padding: 0 14px;
+  }
+
+  nav .nav-links {
+    display: flex;
+    gap: 16px;
+    font-size: 10px;
+  }
+
+  .hero-copy {
+    top: 16vh;
+    left: 24px;
+    right: 24px;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(54px, 13.4vw, 104px);
+    line-height: .88;
+    letter-spacing: 0;
+  }
+
+  .hero-bottom-copy {
+    left: 24px;
+    right: 24px;
+    bottom: 80px;
+  }
+
+  .hero-bottom-copy p {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 560px) {
+  nav {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  nav .brand {
+    min-height: 32px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+
+  nav .nav-links {
+    position: static;
+    transform: none;
+    gap: 9px;
+    margin-left: auto;
+    margin-right: 10px;
+    font-size: 9px;
+    white-space: nowrap;
+  }
+
+  nav .nav-cta {
+    min-width: 32px;
+    min-height: 32px;
+    justify-content: center;
+    padding: 7px 9px;
+  }
+
+  nav .nav-cta > span:last-child { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-links a,
+  .nav-cta,
+  .hero-button,
+  .round-button,
+  .audio-player button,
+  .contact-links a,
+  .contact-links span {
+    transition: none;
+  }
+}

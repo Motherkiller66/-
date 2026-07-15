@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>海报背景延展预览</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:42px;background:#06131c;color:#f6f0e7;font-family:Arial,"Noto Sans SC",sans-serif}.case{width:min(1280px,94vw);border:1px solid rgba(255,255,255,.22);background:#081720}.meta{display:flex;justify-content:space-between;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.16);color:rgba(246,240,231,.58);font:11px monospace;letter-spacing:.12em}.summary{display:grid;grid-template-columns:1.38fr .82fr;min-height:650px}.poster-stage{position:relative;display:grid;place-items:center;overflow:hidden;border-right:1px solid rgba(255,255,255,.16);background:#d8cbb8}.poster-stage::before{content:"";position:absolute;inset:-36px;background:url('/haoshi-bread-poster.jpg') center/cover no-repeat;filter:blur(25px) saturate(.82);transform:scale(1.1)}.poster-stage::after{content:"";position:absolute;inset:0;background:rgba(29,22,13,.16)}.poster{position:relative;z-index:1;height:610px;max-width:76%;object-fit:contain;filter:drop-shadow(0 20px 38px rgba(0,0,0,.32))}.copy{display:flex;flex-direction:column;padding:58px}.copy h1{margin:0 0 18px;font-family:Georgia,"Noto Serif SC",serif;font-size:46px;font-weight:400;line-height:1.25}.copy p{margin:0;color:rgba(246,240,231,.68);font-size:14px;line-height:1.9}.action{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:18px;border-top:1px solid rgba(255,255,255,.24);font-size:13px}.plus{display:grid;place-items:center;width:38px;height:38px;border:1px solid rgba(255,255,255,.35);border-radius:50%}@media(max-width:800px){body{padding:16px}.summary{grid-template-columns:1fr}.poster-stage{min-height:620px;border-right:0;border-bottom:1px solid rgba(255,255,255,.16)}.copy{min-height:360px;padding:34px}.poster{height:570px}}
+  </style>
+</head>
+<body>
+  <article class="case">
+    <div class="meta"><span>03</span><span>POSTER DESIGN · COMPETITION</span></div>
+    <div class="summary">
+      <div class="poster-stage"><img class="poster" src="/haoshi-bread-poster.jpg" alt="豪士面包大广赛海报" /></div>
+      <div class="copy">
+        <h1>豪士面包大广赛<br />海报</h1>
+        <p>以数字“0”为核心视觉符号，传达产品健康卖点的平面广告创意。</p>
+        <div class="action"><span>查看完整案例</span><span class="plus">+</span></div>
+      </div>
+    </div>
+  </article>
+</body>
+</html>
