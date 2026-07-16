@@ -143,6 +143,7 @@ function AwardAudioPlayer() {
 function ProjectVideo() {
   const videoRef = useRef(null)
   const controlsTimerRef = useRef(null)
+  const scrubbingRef = useRef(false)
   const [playing, setPlaying] = useState(false)
   const [controlsVisible, setControlsVisible] = useState(true)
   const [duration, setDuration] = useState(0)
@@ -172,9 +173,32 @@ function ProjectVideo() {
     }
   }
   const seekVideo = event => {
-    const time = Number(event.target.value)
-    if (videoRef.current) videoRef.current.currentTime = time
+    const video = videoRef.current
+    if (!video) return
+    const availableDuration = Number.isFinite(video.duration) && video.duration > 0
+      ? video.duration
+      : duration
+    if (!availableDuration) return
+    const requestedTime = Number(event.currentTarget.value)
+    if (!Number.isFinite(requestedTime)) return
+    const time = Math.min(availableDuration, Math.max(0, requestedTime))
+    video.currentTime = time
     setCurrentTime(time)
+  }
+  const syncVideoDuration = event => {
+    const nextDuration = event.currentTarget.duration
+    if (Number.isFinite(nextDuration) && nextDuration > 0) setDuration(nextDuration)
+  }
+  const beginVideoSeek = () => {
+    scrubbingRef.current = true
+    window.clearTimeout(controlsTimerRef.current)
+    setControlsVisible(true)
+  }
+  const endVideoSeek = () => {
+    scrubbingRef.current = false
+    const video = videoRef.current
+    if (video) setCurrentTime(video.currentTime)
+    showControls()
   }
   const changeVolume = event => {
     const nextVolume = Number(event.target.value)
@@ -207,18 +231,37 @@ function ProjectVideo() {
       preload="metadata"
       playsInline
       onClick={toggleVideo}
-      onLoadedMetadata={event => setDuration(event.currentTarget.duration)}
-      onTimeUpdate={event => setCurrentTime(event.currentTarget.currentTime)}
+      onLoadedMetadata={syncVideoDuration}
+      onLoadedData={syncVideoDuration}
+      onDurationChange={syncVideoDuration}
+      onTimeUpdate={event => {
+        if (!scrubbingRef.current) setCurrentTime(event.currentTarget.currentTime)
+      }}
       onPlay={() => { setPlaying(true); showControls() }}
       onPause={() => { setPlaying(false); showControls() }}
       onEnded={() => setPlaying(false)}
       aria-label="兰州城市宣传 AI 视频"
     />
     {!playing && <button className="video-play-button" onClick={toggleVideo} aria-label="播放兰州城市宣传 AI 视频"><span>▶</span><b>{currentTime > 0 ? '继续播放' : '播放视频'}</b></button>}
-    <div className={`custom-video-controls${controlsVisible ? ' is-visible' : ''}`} onClick={event => event.stopPropagation()}>
+    <div className={`custom-video-controls${controlsVisible ? ' is-visible' : ''}`} onClick={event => event.stopPropagation()} onPointerDown={showControls}>
       <button className="control-play" onClick={toggleVideo} aria-label={playing ? '暂停' : '播放'}>{playing ? 'Ⅱ' : '▶'}</button>
       <span className="video-time">{formatTime(currentTime)}</span>
-      <input className="video-progress" type="range" min="0" max={duration || 0} step="0.1" value={Math.min(currentTime,duration || 0)} onChange={seekVideo} aria-label="视频播放进度"/>
+      <input
+        className="video-progress"
+        type="range"
+        min="0"
+        max={duration > 0 ? duration : 1}
+        step="0.1"
+        value={duration > 0 ? Math.min(currentTime, duration) : 0}
+        disabled={duration <= 0}
+        onInput={seekVideo}
+        onChange={seekVideo}
+        onPointerDown={beginVideoSeek}
+        onPointerUp={endVideoSeek}
+        onPointerCancel={endVideoSeek}
+        onBlur={endVideoSeek}
+        aria-label="视频播放进度"
+      />
       <span className="video-time">{formatTime(duration)}</span>
       <button className="control-mute" onClick={toggleMute} aria-label={muted ? '取消静音' : '静音'}>{muted ? '静音' : '音量'}</button>
       <input className="video-volume" type="range" min="0" max="1" step="0.05" value={muted ? 0 : volume} onChange={changeVolume} aria-label="视频音量"/>
@@ -368,6 +411,7 @@ function App() {
     window.setTimeout(() => setWechatCopied(false), 1800)
   }
   const tiltContactCard = event => {
+    if (event.pointerType && event.pointerType !== 'mouse') return
     const card = event.currentTarget
     const rect = card.getBoundingClientRect()
     const x = (event.clientX - rect.left) / rect.width

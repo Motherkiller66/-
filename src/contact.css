@@ -276,3 +276,11 @@
     transform: none;
   }
 }
+
+@media (hover: none), (pointer: coarse) {
+  .contact-card {
+    transform: none !important;
+    will-change: auto;
+  }
+  .contact-card::after { display: none; }
+}
