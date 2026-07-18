@@ -4,7 +4,7 @@ body,
 main {
   width: 100%;
   max-width: 100%;
-  overflow-x: clip;
+  overflow-x: hidden;
 }
 
 img,
@@ -291,11 +291,11 @@ button:focus-visible {
   }
 
   nav .nav-links {
-    position: static;
-    transform: none;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     gap: 9px;
-    margin-left: auto;
-    margin-right: 10px;
+    margin: 0;
     font-size: 9px;
     white-space: nowrap;
   }

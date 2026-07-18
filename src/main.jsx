@@ -172,19 +172,20 @@ function ProjectVideo() {
       video.pause()
     }
   }
-  const seekVideo = event => {
+  const seekToTime = rawValue => {
     const video = videoRef.current
     if (!video) return
     const availableDuration = Number.isFinite(video.duration) && video.duration > 0
       ? video.duration
       : duration
     if (!availableDuration) return
-    const requestedTime = Number(event.currentTarget.value)
+    const requestedTime = Number(rawValue)
     if (!Number.isFinite(requestedTime)) return
     const time = Math.min(availableDuration, Math.max(0, requestedTime))
     video.currentTime = time
     setCurrentTime(time)
   }
+  const seekVideo = event => seekToTime(event.currentTarget.value)
   const syncVideoDuration = event => {
     const nextDuration = event.currentTarget.duration
     if (Number.isFinite(nextDuration) && nextDuration > 0) setDuration(nextDuration)
@@ -194,10 +195,13 @@ function ProjectVideo() {
     window.clearTimeout(controlsTimerRef.current)
     setControlsVisible(true)
   }
-  const endVideoSeek = () => {
+  const endVideoSeek = event => {
+    seekToTime(event.currentTarget.value)
     scrubbingRef.current = false
-    const video = videoRef.current
-    if (video) setCurrentTime(video.currentTime)
+    showControls()
+  }
+  const cancelVideoSeek = () => {
+    scrubbingRef.current = false
     showControls()
   }
   const changeVolume = event => {
@@ -258,7 +262,7 @@ function ProjectVideo() {
         onChange={seekVideo}
         onPointerDown={beginVideoSeek}
         onPointerUp={endVideoSeek}
-        onPointerCancel={endVideoSeek}
+        onPointerCancel={cancelVideoSeek}
         onBlur={endVideoSeek}
         aria-label="视频播放进度"
       />
@@ -405,6 +409,15 @@ function App() {
   const heroVideo = useRef(null)
   const aboutTitleRef = useRef(null)
   const [wechatCopied, setWechatCopied] = useState(false)
+  useEffect(() => {
+    const video = heroVideo.current
+    if (!video) return undefined
+    video.muted = true
+    const startHeroVideo = () => video.play().catch(() => {})
+    if (video.readyState >= 2) startHeroVideo()
+    else video.addEventListener('canplay', startHeroVideo, { once: true })
+    return () => video.removeEventListener('canplay', startHeroVideo)
+  }, [])
   const copyWechat = async () => {
     await navigator.clipboard.writeText('_nocilantro_0')
     setWechatCopied(true)
@@ -453,12 +466,13 @@ function App() {
         <video
           ref={heroVideo}
           className="hero-video"
-          src="/hero-video-web.mp4"
+          src="/hero-video-web.mp4?v=20s-20260718"
+          poster="/hero-video-poster.jpg?v=20s-20260718"
           autoPlay
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="auto"
           aria-label="首页动态背景视频"
         />
         <div className="ambient one"/><div className="ambient two"/>
