@@ -51,6 +51,7 @@ const islandLyrics = [
 
 function AwardAudioPlayer() {
   const audioRef = useRef(null)
+  const audioScrubbingRef = useRef(false)
   const lyricsRef = useRef(null)
   const lyricLineRefs = useRef([])
   const [playing, setPlaying] = useState(false)
@@ -77,10 +78,47 @@ function AwardAudioPlayer() {
       audio.pause()
     }
   }
-  const seekAudio = event => {
-    const time = Number(event.target.value)
-    if (audioRef.current) audioRef.current.currentTime = time
+  const seekAudioTo = rawTime => {
+    const audio = audioRef.current
+    if (!audio) return
+    const availableDuration = Number.isFinite(audio.duration) && audio.duration > 0
+      ? audio.duration
+      : duration
+    if (!availableDuration) return
+    const requestedTime = Number(rawTime)
+    if (!Number.isFinite(requestedTime)) return
+    const time = Math.min(availableDuration, Math.max(0, requestedTime))
+    audio.currentTime = time
     setCurrentTime(time)
+  }
+  const seekAudio = event => seekAudioTo(event.currentTarget.value)
+  const seekAudioFromPointer = event => {
+    const bounds = event.currentTarget.getBoundingClientRect()
+    if (!bounds.width || duration <= 0) return
+    const ratio = Math.min(1, Math.max(0, (event.clientX - bounds.left) / bounds.width))
+    seekAudioTo(ratio * duration)
+  }
+  const beginAudioSeek = event => {
+    audioScrubbingRef.current = true
+    event.currentTarget.setPointerCapture?.(event.pointerId)
+    seekAudioFromPointer(event)
+  }
+  const moveAudioSeek = event => {
+    if (audioScrubbingRef.current) seekAudioFromPointer(event)
+  }
+  const endAudioSeek = event => {
+    if (!audioScrubbingRef.current) return
+    seekAudioFromPointer(event)
+    audioScrubbingRef.current = false
+    if (event.currentTarget.hasPointerCapture?.(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    }
+  }
+  const cancelAudioSeek = event => {
+    audioScrubbingRef.current = false
+    if (event.currentTarget.hasPointerCapture?.(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    }
   }
   const changeVolume = event => {
     const nextVolume = Number(event.target.value)
@@ -97,8 +135,7 @@ function AwardAudioPlayer() {
     setMuted(nextMuted)
   }
   const seekToLyric = time => {
-    if (audioRef.current) audioRef.current.currentTime = time
-    setCurrentTime(time)
+    seekAudioTo(time)
   }
   const formatTime = seconds => {
     if (!Number.isFinite(seconds)) return '00:00'
@@ -112,13 +149,29 @@ function AwardAudioPlayer() {
         src="/island-25-2.mp3"
         preload="metadata"
         onLoadedMetadata={event => setDuration(event.currentTarget.duration)}
-        onTimeUpdate={event => setCurrentTime(event.currentTarget.currentTime)}
+        onTimeUpdate={event => {
+          if (!audioScrubbingRef.current) setCurrentTime(event.currentTarget.currentTime)
+        }}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
         onEnded={() => { setPlaying(false); setCurrentTime(0) }}
       />
       <button onClick={toggleAudio} aria-label={playing ? '暂停《岛25.2》' : '播放《岛25.2》'}>{playing ? 'Ⅱ' : '▶'}</button>
-      <input className="audio-progress" type="range" min="0" max={duration || 0} step="0.1" value={Math.min(currentTime, duration || 0)} onChange={seekAudio} aria-label="《岛25.2》播放进度" />
+      <input
+        className="audio-progress"
+        type="range"
+        min="0"
+        max={duration > 0 ? duration : 1}
+        step="0.1"
+        value={duration > 0 ? Math.min(currentTime, duration) : 0}
+        disabled={duration <= 0}
+        onChange={seekAudio}
+        onPointerDown={beginAudioSeek}
+        onPointerMove={moveAudioSeek}
+        onPointerUp={endAudioSeek}
+        onPointerCancel={cancelAudioSeek}
+        aria-label="《岛25.2》播放进度"
+      />
       <span>{formatTime(currentTime)} / {formatTime(duration)}</span>
       <button className="audio-mute" onClick={toggleMute} aria-label={muted ? '取消静音' : '静音'}><span aria-hidden="true">{muted ? '🔇' : '🔊'}</span></button>
       <input className="audio-volume" type="range" min="0" max="1" step="0.05" value={muted ? 0 : volume} onChange={changeVolume} aria-label="《岛25.2》音量" />
@@ -186,22 +239,40 @@ function ProjectVideo() {
     setCurrentTime(time)
   }
   const seekVideo = event => seekToTime(event.currentTarget.value)
+  const seekVideoFromPointer = event => {
+    const bounds = event.currentTarget.getBoundingClientRect()
+    if (!bounds.width || duration <= 0) return
+    const ratio = Math.min(1, Math.max(0, (event.clientX - bounds.left) / bounds.width))
+    seekToTime(ratio * duration)
+  }
   const syncVideoDuration = event => {
     const nextDuration = event.currentTarget.duration
     if (Number.isFinite(nextDuration) && nextDuration > 0) setDuration(nextDuration)
   }
-  const beginVideoSeek = () => {
+  const beginVideoSeek = event => {
     scrubbingRef.current = true
     window.clearTimeout(controlsTimerRef.current)
     setControlsVisible(true)
+    event.currentTarget.setPointerCapture?.(event.pointerId)
+    seekVideoFromPointer(event)
+  }
+  const moveVideoSeek = event => {
+    if (scrubbingRef.current) seekVideoFromPointer(event)
   }
   const endVideoSeek = event => {
-    seekToTime(event.currentTarget.value)
+    if (!scrubbingRef.current) return
+    seekVideoFromPointer(event)
     scrubbingRef.current = false
+    if (event.currentTarget.hasPointerCapture?.(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    }
     showControls()
   }
-  const cancelVideoSeek = () => {
+  const cancelVideoSeek = event => {
     scrubbingRef.current = false
+    if (event.currentTarget.hasPointerCapture?.(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    }
     showControls()
   }
   const changeVolume = event => {
@@ -258,12 +329,11 @@ function ProjectVideo() {
         step="0.1"
         value={duration > 0 ? Math.min(currentTime, duration) : 0}
         disabled={duration <= 0}
-        onInput={seekVideo}
         onChange={seekVideo}
         onPointerDown={beginVideoSeek}
+        onPointerMove={moveVideoSeek}
         onPointerUp={endVideoSeek}
         onPointerCancel={cancelVideoSeek}
-        onBlur={endVideoSeek}
         aria-label="视频播放进度"
       />
       <span className="video-time">{formatTime(duration)}</span>
